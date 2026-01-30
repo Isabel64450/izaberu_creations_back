@@ -135,7 +135,8 @@ async getCurrentUser(id){
   return {
     id: user.id || user.customer_id,
     name: user.userName,
-    email: user.userEmail
+    email: user.userEmail,
+    role: user.role
   };
 }
 

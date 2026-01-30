@@ -3,7 +3,7 @@ import ProductService from './products.service.js';
 class ProductController {
   constructor(productService){this.productService=productService}
   
-  async create(req, res) {
+  async create(req, res, next) {
     try {
       const productId = await this.productService.createProduct(req.body);
       res.status(201).json({ message: "Produit créé", productId });
@@ -31,6 +31,7 @@ async addImages(req, res) {
   } catch (error) {
     console.error("Erreur addImages (backend) :", error);
     res.status(500).json({ message: "Erreur serveur lors de l'ajout d'images" });
+    next(error)
   }
 }
   async getAll(req, res) {

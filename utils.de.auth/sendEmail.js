@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-console.log(process.env.GMAIL_USER)
+console.log('doutis de send mail '+ process.env.GMAIL_USER)
 console.log(process.env.GMAIL_APP_PASSWORD)
 
 const transporter = nodemailer.createTransport({
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
     }
 })
 console.log("Email:", process.env.GMAIL_USER);
-        console.log("Mot de passe (4 derniers caractères) :", process.env.GMAIL_APP_PASS?.slice(-4));
+        console.log("Mot de passe (4 derniers caractères) :", process.env.GMAIL_APP_PASSWORD?.slice(-4));
 export default async function sendEmail({to, subject,html}) {
     try{
         const info= await transporter.sendMail({

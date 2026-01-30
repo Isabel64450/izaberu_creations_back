@@ -41,7 +41,14 @@ app.use('/cart', cartRouter(cartController))
 app.use('/products', productRouter(productController))
 app.use('/orders', orderRouter(orderController))
 
-app.listen(CLIENT_URL, () => {
-  console.log(`Server is running at ${CLIENT_URL}`);
+
+
+const PORT = process.env.PORT || 3000; // prendre le port depuis .env ou 3000 par défaut
+
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
+/* app.listen(process.env.CLIENT_URL, () => {
+  console.log(`Server is running at ${process.env.CLIENT_URL}`);
+}); */
 

@@ -1,7 +1,7 @@
 import mysql from "mysql2/promise"
 
 
-const getPool=()=>{
+const getPool = () => {
     const pool = mysql.createPool({
         host:process.env.MARIA_HOST,
         user: process.env.MARIADB_USER,

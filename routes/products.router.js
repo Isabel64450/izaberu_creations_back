@@ -1,5 +1,7 @@
 import { Router } from "express";
 import upload from "../config/multer.js";
+import authentificationToken from "../middlewares/midd.authenticate.js";
+import authorizeRoles from "../middlewares/midd.auth.roles.js";
 
 
 export function productRouter(productController) {
@@ -10,7 +12,7 @@ export function productRouter(productController) {
   
   router.put("/:id", (req, res) => productController.update(req, res));
   router.delete("/:id", (req, res) => productController.delete(req, res));
-  router.post("/", upload.array('images', 3), (req, res) => productController.create(req, res));
+  router.post("/", upload.array('images', 3),authentificationToken,authorizeRoles("ADMIN"), (req, res,next) => productController.create(req, res,next));
   router.post("/:id/images", upload.array('images', 5), (req, res) => productController.addImages(req, res));
   return router;
 }
