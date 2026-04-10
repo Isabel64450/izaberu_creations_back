@@ -1,3 +1,5 @@
 node_modules
 .env
 test.connexion.js
+testIP.js
+testSMTP.js
