@@ -32,11 +32,11 @@ export default async function sendEmail({ to, subject, html }) {
     try {
         const info = await transporter.sendMail({
             from: `${process.env.BREVO_NAME} <${process.env.BREVO_USER}>`,
-            to:"isa.dumas64@gmail.com",
+            to:"isa.dumas@gmail.com",
             subject:"Test brevo",
             html:"<h1>Test</h1>"
         });
-        console.log('📧 Email envoyé avec succès:', info.response);
+       
     } catch (error) {
         console.error(' Erreur lors de l\'envoi de l\'email:', error);
         throw new Error('Erreur lors de l\'envoi de l\'email');
