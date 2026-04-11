@@ -1,58 +1,39 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
+import SibApiV3Sdk from 'sib-api-v3-sdk';
 
 dotenv.config();
 
 
-console.log('Détails de send mail:', process.env.BREVO_USER);
+const client = SibApiV3Sdk.ApiClient.instance;
+const apiKey = client.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
 
-
-const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false, // STARTTLS sera utilisé
-    auth: {
-        user: process.env.BREVO_USER,
-        pass: process.env.BREVO_API_KEY,
-    }
-});
-
-
-transporter.verify((error, success) => {
-   if (error) {
-      console.error(" Connexion SMTP échouée:", error);
-   } else {
-      console.log(" Serveur SMTP prêt !");
-   }
-});
-
+const tranEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
 export default async function sendEmail({ to, subject, html }) {
-    try {
-        const info = await transporter.sendMail({
-            from: `${process.env.BREVO_NAME} <${process.env.BREVO_USER}>`,
-            to:"isa.dumas@gmail.com",
-            subject:"Test brevo",
-            html:"<h1>Test</h1>"
-        });
-       
-    } catch (error) {
-        console.error(' Erreur lors de l\'envoi de l\'email:', error);
-        throw new Error('Erreur lors de l\'envoi de l\'email');
-    }
-}
+  try {
+    const data = await tranEmailApi.sendTransacEmail({
+      sender: {
+        email: process.env.BREVO_SENDER, 
+        name: process.env.BREVO_NAME
+      },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html
+    });
 
+   
+
+  } catch (error) {
+    console.error("Erreur envoi email:", error);
+    if (error.response) {
+     
+    }
+    throw new Error("Erreur lors de l'envoi de l'email");
+  }
+}
 
 export function generateVerificationToken(userId) {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
-}
-
-
-if (process.argv[1].includes("sendEmail")) {
-  sendEmail({
-    to: process.env.BREVO_USER, 
-    subject: "Test Brevo",
-    html: "<h1>Test SMTP réussi !</h1>"
-  });
 }
